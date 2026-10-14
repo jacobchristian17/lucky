@@ -1,0 +1,1037 @@
+:root {
+  --bg: #eaf6ff;
+  --surface: #ffffff;
+  --signal: #38bdf8;
+  --node: #0369a1;
+  --ink: #0c2740;
+  --haze: #5b7a93;
+  --tint: rgba(56, 189, 248, 0.16);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #071a2b;
+    --surface: #0d2438;
+    --signal: #38bdf8;
+    --node: #7dd3fc;
+    --ink: #e3f2ff;
+    --haze: #8fb0c8;
+    --tint: rgba(56, 189, 248, 0.14);
+  }
+}
+
+/* Chosen with the header switch; same values as the dark block above. */
+:root[data-theme="dark"] {
+  --bg: #071a2b;
+  --surface: #0d2438;
+  --signal: #38bdf8;
+  --node: #7dd3fc;
+  --ink: #e3f2ff;
+  --haze: #8fb0c8;
+  --tint: rgba(56, 189, 248, 0.14);
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(30px, 5vw, 44px);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+a {
+  color: var(--node);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Header */
+html {
+  scroll-behavior: smooth;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--tint);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.header-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-heading), sans-serif;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand-photo {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  object-position: center 30%;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--signal);
+}
+
+nav {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+/* Pill that slides to the active link (positioned by Nav.tsx) */
+.nav-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 999px;
+  background: var(--tint);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--signal) 45%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+    width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 0.2s;
+}
+
+nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 15px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+nav a:hover {
+  background: var(--tint);
+  color: var(--node);
+}
+
+nav a.active {
+  color: var(--node);
+  font-weight: 600;
+}
+
+
+
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-left: 6px;
+  border: 1px solid var(--tint);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.theme-toggle:hover {
+  background: var(--tint);
+  color: var(--node);
+}
+
+.theme-toggle svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+body {
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Layout */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 48px 16px 80px;
+}
+
+.site-footer {
+  font-size: 14px;
+  color: var(--haze);
+  text-align: center;
+  padding: 24px 16px;
+}
+
+/* Reveal on scroll (ScrollReveal.tsx). Only hides content once the head script has confirmed JS is running. */
+[data-js] [data-reveal] {
+  /* Only opacity/transform wait for the stagger delay, so hover backgrounds still respond instantly. */
+  transition:
+    opacity 0.6s ease var(--reveal-delay, 0s),
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0s),
+    background-color 0.2s;
+}
+
+[data-js] [data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+[data-js] [data-reveal][data-from="above"]:not([data-revealed]) {
+  transform: translateY(-24px);
+}
+
+/* Siblings appear one after another */
+[data-js] [data-reveal]:nth-child(2) {
+  --reveal-delay: 80ms;
+}
+
+[data-js] [data-reveal]:nth-child(3) {
+  --reveal-delay: 160ms;
+}
+
+[data-js] [data-reveal]:nth-child(4) {
+  --reveal-delay: 240ms;
+}
+
+[data-js] [data-reveal]:nth-child(n + 5) {
+  --reveal-delay: 320ms;
+}
+
+/* Home */
+.hero {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 48px;
+  min-height: calc(100vh - 160px);
+  padding-top: 24px;
+  scroll-margin-top: 80px;
+}
+
+.hero-text {
+  text-align: center;
+  animation: hero-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Page rows enter one after another on load */
+.hero .layer a {
+  animation: hero-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.hero .layer a:nth-of-type(1) { animation-delay: 0.25s; }
+.hero .layer a:nth-of-type(2) { animation-delay: 0.35s; }
+.hero .layer a:nth-of-type(3) { animation-delay: 0.45s; }
+.hero .layer a:nth-of-type(4) { animation-delay: 0.55s; }
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+/* As you scroll away, the home section drifts back and fades (browsers with scroll-driven animations) */
+@supports (animation-timeline: scroll()) {
+  .hero {
+    animation: hero-away linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 80vh;
+  }
+}
+
+@keyframes hero-away {
+  to {
+    opacity: 0.25;
+    transform: translateY(80px) scale(0.97);
+  }
+}
+
+/* Signal ring from each click (ClickPulse.tsx) */
+.click-pulse {
+  position: fixed;
+  z-index: 50;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  border: 2px solid var(--signal);
+  pointer-events: none;
+  animation: click-pulse 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+@keyframes click-pulse {
+  from {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(5);
+  }
+}
+
+.hero .layer {
+  width: 100%;
+  max-width: 560px;
+}
+
+/* Output layer: page rows joined by a vertical spine */
+.layer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.layer a {
+  position: relative;
+  display: grid;
+  grid-template-columns: 24px 40px 1fr;
+  align-items: center;
+  padding: 18px 16px 18px 12px;
+  border-radius: 16px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+/* Each row draws its piece of the spine; the first and last stop at their dot. */
+.layer a::before {
+  content: "";
+  position: absolute;
+  left: 23px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--signal);
+  opacity: 0.5;
+}
+
+.layer a:first-of-type::before {
+  top: 50%;
+}
+
+.layer a:last-of-type::before {
+  bottom: 50%;
+}
+
+.layer-dot {
+  position: relative;
+  z-index: 1;
+  justify-self: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--node);
+  border: 3px solid var(--bg);
+  transition: box-shadow 0.25s;
+}
+
+.layer-edge {
+  position: relative;
+  height: 2px;
+  margin-right: 12px;
+  background: var(--signal);
+  opacity: 0.5;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.layer-text {
+  display: grid;
+  gap: 2px;
+}
+
+.layer-title {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  transition: color 0.2s;
+}
+
+.layer-desc {
+  font-size: 15px;
+  color: var(--haze);
+}
+
+.layer a:hover,
+.layer a:focus-visible {
+  background: var(--tint);
+}
+
+.layer a:hover .layer-title,
+.layer a:focus-visible .layer-title {
+  color: var(--node);
+}
+
+.layer a:hover .layer-dot,
+.layer a:focus-visible .layer-dot {
+  box-shadow: 0 0 0 6px var(--tint), 0 0 18px var(--signal);
+}
+
+.layer a:hover .layer-edge,
+.layer a:focus-visible .layer-edge {
+  background: var(--node);
+  opacity: 1;
+}
+
+.layer a:hover .layer-edge::after,
+.layer a:focus-visible .layer-edge::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 8px var(--signal);
+  animation: edge-travel 0.8s linear infinite;
+}
+
+@keyframes edge-travel {
+  from {
+    left: 0;
+    opacity: 0;
+  }
+  20%,
+  80% {
+    opacity: 1;
+  }
+  to {
+    left: calc(100% - 8px);
+    opacity: 0;
+  }
+}
+
+/* Idle signal drifting down the spine, from the first dot to the last */
+.layer-drift {
+  position: absolute;
+  z-index: 2;
+  left: 20px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 8px var(--signal);
+  pointer-events: none;
+  animation: spine-drift 6s ease-in-out infinite;
+}
+
+@keyframes spine-drift {
+  0% {
+    top: 12.5%;
+    opacity: 0;
+  }
+  10%,
+  80% {
+    opacity: 0.9;
+  }
+  90%,
+  100% {
+    top: 87.5%;
+    opacity: 0;
+  }
+}
+
+.greeting {
+  font-size: 18px;
+  color: var(--haze);
+  margin: 0 0 6px;
+}
+
+/* Glass name: tinted see-through letters with an edge, a soft shadow, and a light reflection
+   that sweeps across once on load and again on hover. */
+.hero h1 {
+  font-size: clamp(32px, 5vw, 44px);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: transparent;
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, var(--node) 75%, transparent) 0%,
+    color-mix(in srgb, var(--signal) 40%, transparent) 36%,
+    rgba(255, 255, 255, 0.9) 45%,
+    color-mix(in srgb, var(--signal) 40%, transparent) 54%,
+    color-mix(in srgb, var(--node) 70%, transparent) 100%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--node) 60%, transparent);
+  filter: drop-shadow(0 6px 14px color-mix(in srgb, var(--node) 28%, transparent));
+  animation: glass-shine 2.2s ease 0.7s both;
+}
+
+.hero h1:hover {
+  animation: glass-shine-again 1.4s ease;
+}
+
+@keyframes glass-shine {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: 100% 0;
+  }
+}
+
+/* Same sweep under a new name so it can replay on hover */
+@keyframes glass-shine-again {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: 100% 0;
+  }
+}
+
+.program {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--node);
+  margin: 12px 0 16px;
+}
+
+.intro {
+  color: var(--haze);
+  font-size: 17px;
+  max-width: 52ch;
+  margin: 0 auto;
+}
+
+/* Network */
+.network {
+  margin: 0;
+}
+
+.network figcaption {
+  font-size: 14px;
+  color: var(--haze);
+  margin-top: 8px;
+}
+
+.net {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.net-h {
+  display: none;
+}
+
+.net-v {
+  max-width: 340px;
+}
+
+@media (min-width: 720px) {
+  .net-h {
+    display: block;
+  }
+
+  .net-v {
+    display: none;
+  }
+}
+
+.edge {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+  opacity: 0.7;
+  animation: draw 0.6s ease-out both;
+  transition: stroke 0.15s, stroke-width 0.15s, opacity 0.15s;
+}
+
+.node-in {
+  fill: var(--signal);
+}
+
+.node-hidden {
+  fill: var(--node);
+  animation: light 0.3s ease-out both;
+}
+
+.node-out {
+  cursor: pointer;
+  outline: none;
+}
+
+.node-out .hit {
+  fill: transparent;
+}
+
+.node-out .ring {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 2;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.node-out .dot {
+  fill: var(--node);
+  animation: light 0.3s ease-out both;
+}
+
+.node-out text {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  fill: var(--ink);
+  transition: fill 0.15s;
+}
+
+.node-out:hover text,
+.node-out:focus-visible text {
+  fill: var(--node);
+}
+
+.node-out:hover .ring,
+.node-out:focus-visible .ring {
+  opacity: 1;
+}
+
+.net:has([data-out="about"]:hover, [data-out="about"]:focus-visible) [data-to="about"],
+.net:has([data-out="portfolio"]:hover, [data-out="portfolio"]:focus-visible) [data-to="portfolio"],
+.net:has([data-out="reflections"]:hover, [data-out="reflections"]:focus-visible) [data-to="reflections"],
+.net:has([data-out="contact"]:hover, [data-out="contact"]:focus-visible) [data-to="contact"] {
+  stroke: var(--node);
+  stroke-width: 2.5;
+  opacity: 1;
+}
+
+.node-out .halo {
+  fill: var(--signal);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.node-out:hover .halo,
+.node-out:focus-visible .halo {
+  opacity: 0.75;
+}
+
+.pulse {
+  fill: none;
+  stroke: var(--node);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.001 1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.net:has([data-out="about"]:hover, [data-out="about"]:focus-visible) [data-pulse="about"],
+.net:has([data-out="portfolio"]:hover, [data-out="portfolio"]:focus-visible) [data-pulse="portfolio"],
+.net:has([data-out="reflections"]:hover, [data-out="reflections"]:focus-visible) [data-pulse="reflections"],
+.net:has([data-out="contact"]:hover, [data-out="contact"]:focus-visible) [data-pulse="contact"] {
+  opacity: 1;
+  animation: travel 0.9s linear infinite backwards;
+}
+
+.drifts {
+  transition: opacity 0.2s;
+}
+
+.net:has(.node-out:hover, .node-out:focus-visible) .drifts {
+  opacity: 0.3;
+}
+
+.drift {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.001 1;
+  opacity: 0;
+  pointer-events: none;
+  animation: drift 7s linear infinite backwards;
+}
+
+@keyframes drift {
+  0% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  4%,
+  26% {
+    opacity: 0.85;
+  }
+  30%,
+  100% {
+    stroke-dashoffset: -1;
+    opacity: 0;
+  }
+}
+
+@keyframes travel {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -1;
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes light {
+  from {
+    fill: var(--bg);
+  }
+}
+
+/* Sections */
+/* Each section gets most of a screen to itself, with generous space between them */
+.section {
+  max-width: 720px;
+  min-height: 80vh;
+  margin: 0 auto;
+  padding: clamp(120px, 18vh, 200px) 0 clamp(40px, 6vh, 80px);
+  scroll-margin-top: 0px;
+}
+
+.section:last-of-type {
+  min-height: 70vh;
+}
+
+.section-title {
+  font-size: clamp(30px, 5vw, 44px);
+  letter-spacing: -0.02em;
+}
+
+/* Underline draws in when the heading is revealed */
+.section-title::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin-top: 12px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--node), var(--signal));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
+}
+
+.section-title[data-revealed]::after,
+[data-revealed] .section-title::after,
+html:not([data-js]) .section-title::after {
+  transform: scaleX(1);
+}
+
+.lead {
+  font-size: 22px;
+  color: var(--haze);
+  margin: 12px 0 0;
+}
+
+.entry {
+  border-left: 2px solid var(--signal);
+  padding: 2px 0 2px 20px;
+  margin-top: 40px;
+}
+
+.entry h3 {
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.entry p {
+  margin: 0 0 8px;
+}
+
+.meta {
+  font-size: 14px;
+  color: var(--haze);
+}
+
+.empty {
+  margin-top: 40px;
+  padding: 20px;
+  border: 1.5px dashed var(--signal);
+  border-radius: 12px;
+  color: var(--haze);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  border: 1.5px solid var(--node);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--node);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.btn:hover {
+  background: var(--tint);
+}
+
+.btn-primary {
+  background: var(--node);
+  color: var(--bg);
+}
+
+.btn-primary:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+/* About */
+.about-head {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.about-photo {
+  position: relative;
+  flex: none;
+  width: 150px;
+  height: 150px;
+}
+
+.about-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  border-radius: 50%;
+  border: 4px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--signal);
+}
+
+.about-photo::after {
+  content: "";
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--node);
+  border: 3px solid var(--bg);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px 32px;
+  margin: 40px 0 0;
+  padding: 20px 0;
+  border-top: 1px solid var(--tint);
+  border-bottom: 1px solid var(--tint);
+}
+
+.facts dt {
+  font-size: 14px;
+  color: var(--haze);
+}
+
+.facts dd {
+  margin: 2px 0 0;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+/* Contact */
+/* Contact methods, joined by a spine like the home page list */
+.channels {
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
+}
+
+.channel {
+  position: relative;
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 18px;
+  padding-bottom: 32px;
+}
+
+.channel:last-child {
+  padding-bottom: 0;
+}
+
+.channel:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 23px;
+  top: 48px;
+  bottom: 0;
+  width: 2px;
+  background: var(--signal);
+  opacity: 0.5;
+}
+
+.channel-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid var(--signal);
+  background: var(--surface);
+  color: var(--node);
+  transition: box-shadow 0.25s;
+}
+
+.channel:hover .channel-icon,
+.channel:focus-within .channel-icon {
+  box-shadow: 0 0 0 6px var(--tint), 0 0 18px var(--signal);
+}
+
+.channel-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.channel-body .meta {
+  margin: 0;
+}
+
+.channel-value {
+  display: inline-block;
+  font-family: var(--font-heading), sans-serif;
+  font-size: clamp(19px, 3.5vw, 24px);
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.channel-value:hover {
+  color: var(--node);
+}
+
+.channel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 14px;
+}
+
+.copy-status {
+  min-height: 1.6em;
+  margin: 16px 0 0;
+  font-size: 14px;
+  color: var(--haze);
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Without motion the dots would sit still at the hidden node, so hide them; the glow stays. */
+  .pulse,
+  .drift,
+  .layer-drift,
+  .layer-edge::after {
+    display: none;
+  }
+}
